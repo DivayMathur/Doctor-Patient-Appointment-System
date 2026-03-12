@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Patients - Appointment System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>🤒 Patients List</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="/patients/create" class="btn btn-primary">+ Add New Patient</a>
+        </div>
+    </div>
+
+    {% if patients %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.name }}</td>
+                    <td>{{ patient.email }}</td>
+                    <td>{{ patient.phone }}</td>
+                    <td>{{ patient.date_of_birth.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {% if patient.gender == 'M' %}
+                            <span class="badge bg-primary">Male</span>
+                        {% else %}
+                            <span class="badge bg-danger">Female</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/patients/{{ patient.id }}" class="btn btn-sm btn-info">View</a>
+                        <a href="/patients/{{ patient.id }}/edit" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="/patients/{{ patient.id }}/delete" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        No patients found. <a href="/patients/create">Create one now</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Details - Appointment System{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>🤒 {{ patient.name }}</h2>
+            <p class="text-muted">{{ patient.date_of_birth.strftime('%Y-%m-%d') }} • {% if patient.gender == 'M' %}Male{% elif patient.gender == 'F' %}Female{% else %}Other{% endif %}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="/patients/{{ patient.id }}/edit" class="btn btn-warning">Edit</a>
+            <form action="/patients/{{ patient.id }}/delete" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+            <a href="/patients/" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Personal Information</div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> <a href="mailto:{{ patient.email }}">{{ patient.email }}</a></p>
+                    <p><strong>Phone:</strong> <a href="tel:{{ patient.phone }}">{{ patient.phone }}</a></p>
+                    <p><strong>Date of Birth:</strong> {{ patient.date_of_birth.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>Gender:</strong> 
+                        {% if patient.gender == 'M' %}
+                            <span class="badge bg-primary">Male</span>
+                        {% elif patient.gender == 'F' %}
+                            <span class="badge bg-danger">Female</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Other</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Address:</strong> {{ patient.address }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Medical History</div>
+                <div class="card-body">
+                    {% if patient.medical_history %}
+                        {{ patient.medical_history }}
+                    {% else %}
+                        <p class="text-muted">No medical history recorded.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Appointments</div>
+                <div class="card-body">
+                    {% if appointments %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Doctor</th>
+                                    <th>Date</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in appointments %}
+                                <tr>
+                                    <td><a href="/doctors/{{ appointment.doctor_id }}">{{ appointment.doctor.name }}</a></td>
+                                    <td>{{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>{{ appointment.reason_for_visit }}</td>
+                                    <td>
+                                        {% if appointment.status == 'scheduled' %}
+                                            <span class="badge bg-warning text-dark">Scheduled</span>
+                                        {% elif appointment.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Cancelled</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No appointments scheduled.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
