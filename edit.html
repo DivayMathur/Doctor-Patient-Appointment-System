@@ -1,56 +1,57 @@
 {% extends "base.html" %}
 
-{% block title %}Edit Patient - Appointment System{% endblock %}
+{% block title %}Edit Doctor - Appointment System{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2>Edit Patient</h2>
+            <h2>Edit Doctor</h2>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Update Patient Information</div>
+                <div class="card-header">Update Doctor Information</div>
                 <div class="card-body">
                     <form method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name *</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ patient.name }}" required>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ doctor.name }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email *</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ patient.email }}" required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ doctor.email }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone Number *</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" value="{{ patient.phone }}" required>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="{{ doctor.phone }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="date_of_birth" class="form-label">Date of Birth *</label>
-                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ patient.date_of_birth.strftime('%Y-%m-%d') }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="gender" class="form-label">Gender *</label>
-                            <select class="form-control" id="gender" name="gender" required>
-                                <option value="M" {% if patient.gender == 'M' %}selected{% endif %}>Male</option>
-                                <option value="F" {% if patient.gender == 'F' %}selected{% endif %}>Female</option>
-                                <option value="O" {% if patient.gender == 'O' %}selected{% endif %}>Other</option>
+                            <label for="specialization" class="form-label">Specialization *</label>
+                            <select class="form-control" id="specialization" name="specialization" required>
+                                <option value="Cardiology" {% if doctor.specialization == 'Cardiology' %}selected{% endif %}>Cardiology</option>
+                                <option value="Neurology" {% if doctor.specialization == 'Neurology' %}selected{% endif %}>Neurology</option>
+                                <option value="Orthopedics" {% if doctor.specialization == 'Orthopedics' %}selected{% endif %}>Orthopedics</option>
+                                <option value="Dermatology" {% if doctor.specialization == 'Dermatology' %}selected{% endif %}>Dermatology</option>
+                                <option value="Pediatrics" {% if doctor.specialization == 'Pediatrics' %}selected{% endif %}>Pediatrics</option>
+                                <option value="General Practice" {% if doctor.specialization == 'General Practice' %}selected{% endif %}>General Practice</option>
+                                <option value="Psychiatry" {% if doctor.specialization == 'Psychiatry' %}selected{% endif %}>Psychiatry</option>
+                                <option value="Surgery" {% if doctor.specialization == 'Surgery' %}selected{% endif %}>Surgery</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Address *</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required>{{ patient.address }}</textarea>
+                            <label for="experience_years" class="form-label">Years of Experience *</label>
+                            <input type="number" class="form-control" id="experience_years" name="experience_years" value="{{ doctor.experience_years }}" min="0" required>
                         </div>
                         <div class="mb-3">
-                            <label for="medical_history" class="form-label">Medical History</label>
-                            <textarea class="form-control" id="medical_history" name="medical_history" rows="4">{{ patient.medical_history or '' }}</textarea>
+                            <label for="clinic_address" class="form-label">Clinic Address *</label>
+                            <textarea class="form-control" id="clinic_address" name="clinic_address" rows="3" required>{{ doctor.clinic_address }}</textarea>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="/patients/{{ patient.id }}" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Update Patient</button>
+                            <a href="/doctors/{{ doctor.id }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Update Doctor</button>
                         </div>
                     </form>
                 </div>
