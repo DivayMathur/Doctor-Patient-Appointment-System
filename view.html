@@ -1,74 +1,85 @@
 {% extends "base.html" %}
 
-{% block title %}Doctor Details - Appointment System{% endblock %}
+{% block title %}Appointment Details - Appointment System{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2>👨‍⚕️ {{ doctor.name }}</h2>
-            <p class="text-muted">{{ doctor.specialization }}</p>
+            <h2>📅 Appointment Details</h2>
+            <p class="text-muted">ID: {{ appointment.id }}</p>
         </div>
         <div class="col-md-4 text-end">
-            <a href="/doctors/{{ doctor.id }}/edit" class="btn btn-warning">Edit</a>
-            <form action="/doctors/{{ doctor.id }}/delete" method="POST" class="d-inline">
+            <a href="/appointments/{{ appointment.id }}/edit" class="btn btn-warning">Edit</a>
+            <form action="/appointments/{{ appointment.id }}/delete" method="POST" class="d-inline">
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
             </form>
-            <a href="/doctors/" class="btn btn-secondary">Back</a>
+            <a href="/appointments/" class="btn btn-secondary">Back</a>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Personal Information</div>
+                <div class="card-header">Appointment Information</div>
                 <div class="card-body">
-                    <p><strong>Email:</strong> <a href="mailto:{{ doctor.email }}">{{ doctor.email }}</a></p>
-                    <p><strong>Phone:</strong> <a href="tel:{{ doctor.phone }}">{{ doctor.phone }}</a></p>
-                    <p><strong>Specialization:</strong> <span class="badge bg-info">{{ doctor.specialization }}</span></p>
-                    <p><strong>Experience:</strong> {{ doctor.experience_years }} years</p>
-                    <p><strong>Clinic Address:</strong> {{ doctor.clinic_address }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Appointments</div>
-                <div class="card-body">
-                    {% if appointments %}
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Patient</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for appointment in appointments %}
-                                <tr>
-                                    <td><a href="/patients/{{ appointment.patient_id }}">{{ appointment.patient.name }}</a></td>
-                                    <td>{{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                                    <td>
-                                        {% if appointment.status == 'scheduled' %}
-                                            <span class="badge bg-warning text-dark">Scheduled</span>
-                                        {% elif appointment.status == 'completed' %}
-                                            <span class="badge bg-success">Completed</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">Cancelled</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Doctor:</strong><br>
+                            <a href="/doctors/{{ appointment.doctor_id }}">{{ appointment.doctor.name }}</a><br>
+                            <small class="text-muted">{{ appointment.doctor.specialization }}</small>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Patient:</strong><br>
+                            <a href="/patients/{{ appointment.patient_id }}">{{ appointment.patient.name }}</a><br>
+                            <small class="text-muted">{{ appointment.patient.email }}</small>
+                        </div>
                     </div>
-                    {% else %}
-                    <p class="text-muted">No appointments scheduled.</p>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Appointment Date & Time:</strong><br>
+                            {{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status:</strong><br>
+                            {% if appointment.status == 'scheduled' %}
+                                <span class="badge bg-warning text-dark">Scheduled</span>
+                            {% elif appointment.status == 'completed' %}
+                                <span class="badge bg-success">Completed</span>
+                            {% else %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <strong>Reason for Visit:</strong><br>
+                        {{ appointment.reason_for_visit }}
+                    </div>
+                    {% if appointment.notes %}
+                    <div class="mb-3">
+                        <strong>Notes:</strong><br>
+                        {{ appointment.notes }}
+                    </div>
                     {% endif %}
                 </div>
             </div>
+
+            {% if appointment.status == 'scheduled' %}
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <form action="/appointments/{{ appointment.id }}/complete" method="POST">
+                        <button type="submit" class="btn btn-success w-100">Mark as Completed</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <form action="/appointments/{{ appointment.id }}/cancel" method="POST">
+                        <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Cancel this appointment?')">Cancel Appointment</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

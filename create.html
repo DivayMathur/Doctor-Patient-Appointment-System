@@ -1,58 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}Create Doctor - Appointment System{% endblock %}
+{% block title %}Create Appointment - Appointment System{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2>Add New Doctor</h2>
+            <h2>Schedule New Appointment</h2>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Doctor Information</div>
+                <div class="card-header">Appointment Details</div>
                 <div class="card-body">
                     <form method="POST">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Full Name *</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email *</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number *</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="specialization" class="form-label">Specialization *</label>
-                            <select class="form-control" id="specialization" name="specialization" required>
-                                <option value="">Select Specialization</option>
-                                <option value="Cardiology">Cardiology</option>
-                                <option value="Neurology">Neurology</option>
-                                <option value="Orthopedics">Orthopedics</option>
-                                <option value="Dermatology">Dermatology</option>
-                                <option value="Pediatrics">Pediatrics</option>
-                                <option value="General Practice">General Practice</option>
-                                <option value="Psychiatry">Psychiatry</option>
-                                <option value="Surgery">Surgery</option>
+                            <label for="doctor_id" class="form-label">Select Doctor *</label>
+                            <select class="form-control" id="doctor_id" name="doctor_id" required>
+                                <option value="">Choose a doctor</option>
+                                {% for doctor in doctors %}
+                                <option value="{{ doctor.id }}">{{ doctor.name }} - {{ doctor.specialization }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="experience_years" class="form-label">Years of Experience *</label>
-                            <input type="number" class="form-control" id="experience_years" name="experience_years" min="0" required>
+                            <label for="patient_id" class="form-label">Select Patient *</label>
+                            <select class="form-control" id="patient_id" name="patient_id" required>
+                                <option value="">Choose a patient</option>
+                                {% for patient in patients %}
+                                <option value="{{ patient.id }}">{{ patient.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="appointment_date" class="form-label">Appointment Date *</label>
+                                <input type="date" class="form-control" id="appointment_date" name="appointment_date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="appointment_time" class="form-label">Appointment Time *</label>
+                                <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="clinic_address" class="form-label">Clinic Address *</label>
-                            <textarea class="form-control" id="clinic_address" name="clinic_address" rows="3" required></textarea>
+                            <label for="reason_for_visit" class="form-label">Reason for Visit *</label>
+                            <textarea class="form-control" id="reason_for_visit" name="reason_for_visit" rows="3" placeholder="Describe the reason for the appointment" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status *</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="scheduled" selected>Scheduled</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="/doctors/" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Create Doctor</button>
+                            <a href="/appointments/" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create Appointment</button>
                         </div>
                     </form>
                 </div>
